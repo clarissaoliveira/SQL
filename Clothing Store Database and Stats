@@ -1,0 +1,31 @@
+CREATE TABLE clothing (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, inventory INTEGER, cost REAL, price REAL, season TEXT);
+
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("T-shirt", 8, 5.00, 8.00, "summer");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("jeans", 10, 15.00, 25.00, "seasonless");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("skirt", 6, 10.00, 14.00, "summer");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("short dress", 7, 12.00, 20.00, "summer");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("long sleeve dress", 5, 15.00, 25.00, "fall");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("short", 10, 10.00, 15.00, "summer");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("pants", 5, 20.00, 30.00, "winter");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("jacket", 5, 15.00, 25.00, "fall");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("sweater", 4, 15.00, 20.00, "winter");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("bikini", 9, 25.00, 40.00, "summer");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("one-piece swimwear", 4, 20.00, 45.00, "summer");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("blouse", 12, 9.00, 18.00, "seasonless");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("pajamas", 6, 8.00, 12.00, "summer");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("flannel", 8, 12.00, 25.00, "fall");
+INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("cropped", 7, 10.00, 15.00, "summer");
+
+--display the database ordered by price.
+SELECT * FROM clothing 
+ORDER BY price;
+
+--what is the expected profit per product and per unit of product? 
+SELECT name, price - cost AS profit_per_unit,  inventory * (price - cost) AS future_profit 
+FROM clothing 
+ORDER BY future_profit DESC
+
+--what products on the inventory has 5 or less units available? 
+SELECT name, inventory FROM clothing 
+WHERE inventory <= 5
+ORDER BY inventory ASC
