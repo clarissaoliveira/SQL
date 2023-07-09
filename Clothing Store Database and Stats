@@ -20,12 +20,12 @@ INSERT INTO clothing (name, inventory, cost, price, season) VALUES ("cropped", 7
 SELECT * FROM clothing 
 ORDER BY price;
 
---what is the expected profit per product and per unit of product? 
+--Expected profit per product and per unit of product. 
 SELECT name, price - cost AS profit_per_unit,  inventory * (price - cost) AS future_profit 
 FROM clothing 
 ORDER BY future_profit DESC
 
---what products on the inventory has 5 or less units available? 
+--Products in stock that has 5 or less units available. 
 SELECT name, inventory FROM clothing 
 WHERE inventory <= 5
 ORDER BY inventory ASC
