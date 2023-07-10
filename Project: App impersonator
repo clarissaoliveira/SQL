@@ -1,0 +1,33 @@
+/* What does the app's SQL look like? */
+
+CREATE TABLE myfitnessapp
+(id INTEGER PRIMARY KEY AUTOINCREMENT,
+date TEXT,
+weight REAL,
+exercise TEXT,
+exercise_type TEXT,
+steps INTEGER,
+follow_mealplan TEXT,
+consumed_calories INTEGER,
+mood TEXT);
+
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-01-2023", 115.0, "Yes", "weight training", 10000, "Yes", 2000, "confident");
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-02-2023", 114.6, "Yes", "running", 15000, "Yes", 2000, "confident");
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-03-2023", 114.6, "Yes", "weight training", 12000, "Yes", 2000, "happy");
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-04-2023", 115.0, "No", NULL, 5000, "No", 3000, "disappointed");
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-05-2023", 117.0, "Yes", "running", 18000, "Yes", 2000, "weak");
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-06-2023", 116.0, "Yes", "weight training", 14000, "No", 2200, "not motivated");
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-07-2023", 115.8, "Yes", "biking", 8000, "Yes", 2000, "happy");
+INSERT INTO myfitnessapp (date, weight, exercise, exercise_type, steps, follow_mealplan, consumed_calories, mood) VALUES ("07-08-2023", 115.0, "Yes", "swimming", 17000, "Yes", 2000, "motivated");
+
+SELECT * FROM myfitnessapp;
+
+
+--Use an UPDATE to emulate what happens
+
+UPDATE myfitnessapp SET exercise_type = "paddle boarding" WHERE id = 4;
+SELECT * FROM myfitnessapp;
+
+--Use a DELETE to emulate what happens
+DELETE FROM myfitnessapp WHERE id = 8;
+SELECT * FROM myfitnessapp;
