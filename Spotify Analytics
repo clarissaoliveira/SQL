@@ -24,51 +24,51 @@ duration_ms integer NOT NULL,
 time_signature integer NOT NULL )
 
 
-SELECT * FROM BIT_DB.Spotifydata
+SELECT * FROM Spotifydata
 
 --Who are the Top10 Artists by Popularity
 
 SELECT artist_name
-FROM BIT_DB.Spotifydata
+FROM BSpotifydata
 ORDER BY popularity DESC
 LIMIT 10
 
 --Which songs have the longest duration?
 
 SELECT track_name
-FROM BIT_DB.Spotifydata
+FROM Spotifydata
 ORDER BY duration_ms DESC
 LIMIT 5
 
 --What artist released the longest song? 
 
 SELECT artist_name
-FROM BIT_DB.Spotifydata
+FROM Spotifydata
 ORDER BY duration_ms DESC
 LIMIT 1
 
 --Which songs have the lowest level of energy
 
 SELECT track_name
-FROM BIT_DB.Spotifydata
+FROM Spotifydata
 ORDER BY energy ASC
 LIMIT 10
 
 --Which songs have better danceability levels
 
 SELECT track_name
-FROM BIT_DB.Spotifydata
+FROM Spotifydata
 ORDER BY danceability DESC
 LIMIT 5
 
 --Whats the most popular and least popular songs?
 
 SELECT track_name, popularity
-FROM BIT_DB.Spotifydata 
+FROM Spotifydata 
 WHERE popularity = (SELECT MAX(popularity)
-FROM BIT_DB.Spotifydata) 
+FROM Spotifydata) 
 OR popularity = (SELECT MIN(popularity)
-FROM BIT_DB.Spotifydata)
+FROM Spotifydata)
 ORDER BY Popularity DESC
 
 --Determine danceability from the most popular and least popular songs.
@@ -85,8 +85,31 @@ ORDER BY Popularity DESC
 --What's the average danceability for the most popular song and the least popular song
 
 SELECT AVG(danceability)
-FROM BIT_DB.Spotifydata 
+FROM Spotifydata 
 WHERE popularity = (SELECT MAX(popularity)
-FROM BIT_DB.Spotifydata) 
+FROM Spotifydata) 
 OR popularity = (SELECT MIN(popularity)
-FROM BIT_DB.Spotifydata)
+FROM Spotifydata)
+
+
+--Calculate the average popularity for the artists in the Spotify data table.
+
+SELECT artist_name, AVG(popularity)
+FROM Spotifydata
+GROUP BY artist_name
+
+--Then, for every artist with an average popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star”.
+
+
+WITH CTE_AVG_POP AS (
+SELECT s.artist_name, 
+AVG(s.popularity) AS avg_pop
+FROM Spotifydata s
+GROUP BY s.artist_name
+)
+SELECT artist_name, avg_pop, 'Top Star' AS tag
+FROM CTE_AVG_POP
+WHERE avg_pop >=90
+GROUP BY artist_name
+
+
