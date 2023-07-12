@@ -1,4 +1,4 @@
--Demonstrating use of CTE
+-Demonstrating use of CTE, window function and CASE statement
 
 CREATE TABLE BIT_DB.CityBikeLanes (
 id integer primary key,
@@ -119,3 +119,13 @@ WHERE avg_safety >= 4.0
 GROUP BY street
 HAVING width_feet >= 4.5
 ORDER BY width_feet DESC
+
+--List of all the bike lanes, both safety ratings for each lane, the average safety rating for each lane, and a label with the recommendation as "Remove", "Leave As-Is", or "Improvements Needed"
+
+SELECT street, safetyrating,
+AVG(safetyrating) OVER (PARTITION BY street) as "Average_safety_rating",
+CASE WHEN AVG(safetyrating) OVER (PARTITION BY street) >= 4 THEN 'Leave As-Is'
+    WHEN AVG(safetyrating) OVER (PARTITION BY street) <= 2.5 THEN 'Remove'
+    ELSE 'Improvements Needed'
+END AS Recommendations
+FROM CityBikeLanes
