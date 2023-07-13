@@ -76,3 +76,18 @@ WHERE t.TrackId = i.TrackId AND a.ArtistID = alb.ArtistID AND t.AlbumId = alb.Al
 SELECT t.Name AS TrackName, a.Title Album_Title, m.Name as Media_Type, g.Name
 FROM tracks t, albums a, media_types m, genres g, artists art
 WHERE t.AlbumId = a.AlbumId AND a.ArtistId = art.ArtistId AND t.GenreId = g.GenreId AND m.MediaTypeId = t.MediaTypeId
+
+--Show the total sales made by each sales agent.
+
+SELECT ROUND(SUM(Total),2), e.FirstName || ' ' || e.LastName AS Agent_FullName
+FROM customers c, employees e, invoices i
+WHERE e.employeeid = c.supportrepid AND c.customerid = i.customerid
+GROUP BY Agent_FullName
+
+--Which sales agent made the most dollars in sales in 2009?
+
+SELECT ROUND(SUM(i.Total),2) AS TotalDollars, e.FirstName || ' ' || e.LastName AS Agent_FullName
+FROM invoices i, employees e, customers c
+WHERE i.InvoiceDate LIKE'%2009%' AND e.employeeid = c.supportrepid AND c.customerid = i.customerid
+GROUP BY Agent_FullName
+ORDER BY TotalDollars DESC
