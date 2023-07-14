@@ -1,0 +1,130 @@
+Shoes_Store_Database
+
+SELECT * FROM sqlite_schema
+WHERE type='table'
+ORDER BY name;
+
+SELECT * FROM info;
+
+--Number of products per brand
+SELECT DISTINCT COUNT(brand), brand
+FROM brands
+GROUP BY brand;
+
+--How many slippers/products
+SELECT * 
+FROM info
+WHERE product_name LIKE '%slippers%'
+
+--How many slippers/products for women
+SELECT * 
+FROM info
+WHERE product_name LIKE '%slippers%' AND product_name LIKE '%women%';
+
+--How many slippers/products for women, prices and disocunts
+
+SELECT product_name, listing_price, sale_price, ROUND(((listing_price-sale_price)/listing_price)*100,0) AS discount_in_percentage
+FROM info i, finance f
+WHERE product_name LIKE '%slippers%' AND product_name LIKE '%women%' AND i.product_ID = f.product_ID
+ORDER BY discount_in_percentage DESC
+
+--Products with highest revenue including brand and genre
+SELECT f.product_id, revenue, product_name, brand,
+    CASE WHEN product_name LIKE '%unisex%' THEN 'Unisex'
+    WHEN product_name LIKE '%women%' THEN 'Women'
+    WHEN product_name LIKE 'Men%' THEN 'Men'
+    ELSE 'Unisex'
+    END Genre
+FROM finance f, info i, brands b
+WHERE f.product_id = i.product_id AND revenue <> 'None' AND b.product_id = f.product_id
+ORDER BY revenue DESC
+
+
+--Number of products per genre
+SELECT COUNT(product_name),
+CASE WHEN product_name LIKE '%unisex%' THEN 'Unisex'
+    WHEN product_name LIKE '%women%' THEN 'Women'
+    WHEN product_name LIKE 'Men%' THEN 'Men'
+    ELSE 'Unisex'
+    END Genre
+FROM info
+GROUP BY Genre
+
+--Average Price of products
+
+SELECT ROUND(AVG(sale_price),2 )AS avg_price
+FROM finance
+
+
+--Types of shoes
+SELECT product_id, product_name, description,
+CASE WHEN description LIKE '%run%' THEN 'Running'
+    WHEN description LIKE '%bike%' THEN 'Biking'
+    WHEN description LIKE '%slip%' THEN 'Slip-ons'
+    WHEN description LIKE '%flip%' THEN 'Flip flop'
+    WHEN description LIKE '%sandal%' THEN 'Flip flop'
+    WHEN description LIKE '%basket%' THEN 'Basketball'
+    WHEN description LIKE '%skate%' THEN 'Skate'
+    WHEN description LIKE '%court%' THEN 'Court'
+    WHEN description LIKE '%90%' THEN '90shoes'
+    WHEN description LIKE '%80%' THEN '80shoes'
+    WHEN description LIKE '%70%' THEN '70shoes'
+        WHEN description LIKE '%chic%' THEN 'chic'
+    WHEN description LIKE '%retro%' THEN 'retro'
+    WHEN description LIKE '%plataform%' THEN 'plataform'
+    ELSE 'Style'
+    END Type
+FROM info
+WHERE description <> 'None'
+ORDER BY Type
+
+--
+
+SELECT product_id, product_name, description,
+CASE WHEN description LIKE '%run%' THEN 'Running'
+    WHEN description LIKE '%bike%' THEN 'Biking'
+    WHEN description LIKE '%slip%' THEN 'Slip-ons'
+    WHEN description LIKE '%flip%' THEN 'Flip flop'
+    WHEN description LIKE '%sandal%' THEN 'Flip flop'
+    WHEN description LIKE '%basket%' THEN 'Basketball'
+    WHEN description LIKE '%court%' THEN 'Court'
+    WHEN description LIKE '%90%' THEN '90shoes'
+    WHEN description LIKE '%80%' THEN '80shoes'
+    WHEN description LIKE '%70%' THEN '70shoes'
+    WHEN description LIKE '%skate%' THEN 'Skate'
+    WHEN description LIKE '%chic%' THEN 'chic'
+    WHEN description LIKE '%retro%' THEN 'retro'
+    WHEN description LIKE '%plataform%' THEN 'plataform'
+    WHEN description LIKE '%hiking%' THEN 'hiking'
+    WHEN description LIKE '%street%' THEN 'street'
+    ELSE 'Style'
+    END Type
+FROM info
+WHERE description <> 'None' AND Type = 'Style'
+
+
+--Quantity of products according to type of shoes
+
+SELECT COUNT(product_id),
+CASE WHEN description LIKE '%run%' THEN 'Running'
+    WHEN description LIKE '%bike%' THEN 'Biking'
+    WHEN description LIKE '%slip%' THEN 'Slip-ons'
+    WHEN description LIKE '%flip%' THEN 'Flip flop'
+    WHEN description LIKE '%sandal%' THEN 'Flip flop'
+    WHEN description LIKE '%basket%' THEN 'Basketball'
+     WHEN description LIKE '%court%' THEN 'Court'
+    WHEN description LIKE '%90%' THEN '90shoes'
+    WHEN description LIKE '%80%' THEN '80shoes'
+    WHEN description LIKE '%70%' THEN '70shoes'
+    WHEN description LIKE '%skate%' THEN 'Skate'
+    WHEN description LIKE '%chic%' THEN 'chic'
+    WHEN description LIKE '%retro%' THEN 'retro'
+    WHEN description LIKE '%plataform%' THEN 'plataform'
+    WHEN description LIKE '%hiking%' THEN 'hiking'
+    WHEN description LIKE '%street%' THEN 'street'
+    ELSE 'Style'
+    END Type
+FROM info
+WHERE description <> 'None'
+GROUP BY Type
+ORDER BY COUNT(product_id) DESC
