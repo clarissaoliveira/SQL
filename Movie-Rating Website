@@ -155,3 +155,88 @@ SELECT rID
 FROM reviewer
 WHERE name = 'Chris Jackson'))
 
+-For all pairs of reviewers such that both reviewers gave a rating to the same movie, return the names of both reviewers. 
+Eliminate duplicates, don't pair reviewers with themselves, and include each pair only once. For each pair, return the names in the pair in alphabetical order.
+
+SELECT DISTINCT rv1.name,rv2.name
+FROM rating r1 
+JOIN rating r2 on r1.mID = r2.mID 
+JOIN reviewer rv1 on rv1.rID = r1.rID 
+JOIN reviewer rv2 on rv2.rID = r2.rID and rv1.name < rv2.name
+ORDER BY rv1.name,rv2.name
+
+-For each rating that is the lowest (fewest stars) currently in the database, return the reviewer name, movie title, and number of stars.
+
+SELECT name, title, stars
+FROM movie, rating, reviewer
+WHERE reviewer.rID = rating.rID AND movie.mID = rating.mID AND stars =
+(
+	SELECT MIN(stars)
+FROM rating
+GROUP BY stars)
+
+-List movie titles and average ratings, from highest-rated to lowest-rated. If two or more movies have the same average rating, list them in alphabetical order.
+
+SELECT title, AVG(stars)
+FROM movie, rating
+WHERE movie.mID = rating.mID
+GROUP BY title
+ORDER BY AVG(stars) DESC, title ASC
+
+-Find the names of all reviewers who have contributed three or more ratings. 
+
+SELECT name
+FROM
+(SELECT COUNT(name), name
+FROM 
+(SELECT name
+FROM reviewer, rating
+WHERE reviewer.rID = rating.rID)
+GROUP BY name
+HAVING COUNT(name) >= 3)
+
+-Some directors directed more than one movie. For all such directors, return the titles of all movies directed by them, along with the director name. 
+Sort by director name, then movie title. 
+
+SELECT title, director
+FROM movie
+WHERE director IN (
+SELECT director
+FROM movie
+GROUP BY director
+HAVING COUNT(*) >= 2)
+ORDER BY director, title
+
+-Find the movie(s) with the highest average rating. Return the movie title(s) and average rating. 
+
+SELECT title, AVG(stars)
+FROM rating, movie
+WHERE movie.mID = rating.mID
+GROUP BY rating.mID
+ORDER BY AVG(stars) DESC
+LIMIT 1
+
+-Find the movie(s) with the lowest average rating. Return the movie title(s) and average rating.
+
+SELECT m.title, AVG(r.stars) AS string
+FROM movie m, rating r
+WHERE m.mID = r.mID
+GROUP BY r.mID
+HAVING string =
+(SELECT MIN(s.stars) AS stars FROM
+(SELECT mID, AVG(stars) AS stars
+FROM rating
+GROUP BY mID) AS s)
+
+-For each director, return the director's name together with the title(s) of the movie(s) they directed that received the highest rating among all of their movies, and the value of that rating.
+Ignore movies whose director is NULL.
+
+SELECT director, title, stars
+FROM
+(
+SELECT director, title, MAX(stars) as stars
+FROM rating r, movie m 
+	WHERE m.mID = r.mID AND m.director is not NULL
+GROUP BY m.director)
+
+
