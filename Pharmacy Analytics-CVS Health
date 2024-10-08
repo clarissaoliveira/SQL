@@ -1,0 +1,18 @@
+--top 3 most profitable drugs sold, and how much profit they made.
+SELECT drug, (total_sales - cogs) AS total_profit
+FROM pharmacy_sales
+ORDER BY total_profit DESC
+LIMIT 3;
+
+--Manufacturers associated with the drugs that resulted in losses for CVS Health and calculate the total amount of losses incurred.
+SELECT manufacturer, COUNT(drug) AS drug_count, (SUM(cogs)-SUM(total_sales)) AS total_loss
+FROM pharmacy_sales
+WHERE cogs > total_sales
+GROUP BY manufacturer 
+ORDER BY total_loss DESC;
+
+--Total drug sales for each manufacturer.
+SELECT manufacturer, CONCAT('$', ROUND(SUM(total_sales)/1000000), ' million') AS sales_mil
+FROM pharmacy_sales
+GROUP BY manufacturer 
+ORDER BY SUM(total_sales) DESC;
